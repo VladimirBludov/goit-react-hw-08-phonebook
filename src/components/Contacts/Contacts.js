@@ -1,8 +1,22 @@
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actions from '../../redux/contacts/contacts-actions';
 import { Container } from './Contacts.styles';
 import ItemContact from './ItemContact';
 
-export default function Contacts({ contacts, deleteContact }) {
+export default function Contacts() {
+  const contacts = useSelector(state => state.contacts.items);
+  const dispatch = useDispatch();
+
+  const deleteContact = id => dispatch(actions.deleteContact(id));
+
+  // const getVisibleContacts = () => {
+  //   const optimizedFilter = filter.toLowerCase();
+
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(optimizedFilter)
+  //   );
+  // };
+
   return (
     <Container>
       {contacts.map(({ id, name, number }, index) => {
@@ -19,14 +33,3 @@ export default function Contacts({ contacts, deleteContact }) {
     </Container>
   );
 }
-
-Contacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  deleteContact: PropTypes.func.isRequired,
-};

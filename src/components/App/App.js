@@ -14,35 +14,20 @@ export default function App() {
   const [filter, setFilter] = useState('');
 
   const addContact = (name, number) => {
-    const isContact = checkContact(name);
-
-    if (isContact) {
-      toast.error(`${name} is already in contacts.`);
-      return;
-    }
-
-    const contact = {
-      id: shortid.generate(),
-      name,
-      number,
-    };
-
-    setContacts([...contacts, contact]);
-  };
-
-  const deleteContact = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    // const isContact = checkContact(name);
+    // if (isContact) {
+    //   toast.error(`${name} is already in contacts.`);
+    //   return;
+    // }
+    // const contact = {
+    //   id: shortid.generate(),
+    //   name,
+    //   number,
+    // };
+    // setContacts([...contacts, contact]);
   };
 
   const getFilter = e => setFilter(e.target.value);
-
-  const getVisibleContacts = () => {
-    const optimizedFilter = filter.toLowerCase();
-
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(optimizedFilter)
-    );
-  };
 
   const checkContact = name => {
     const normalizedName = name.toLowerCase();
@@ -59,10 +44,7 @@ export default function App() {
       </Section>
       <Section title="Contacts">
         <FindContacts filter={filter} onChange={getFilter} />
-        <Contacts
-          contacts={getVisibleContacts()}
-          deleteContact={deleteContact}
-        />
+        <Contacts />
       </Section>
       <ToastContainer
         position="top-center"
