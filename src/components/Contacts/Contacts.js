@@ -1,27 +1,20 @@
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../../redux/contacts/contacts-actions';
+import { getVisibleContacts } from 'redux/contacts/contacts-selectors';
 import { Container } from './Contacts.styles';
-import ItemContact from './ItemContact';
+import ContactsItem from '../ContactsItem';
 
 export default function Contacts() {
-  const contacts = useSelector(state => state.contacts.items);
+  const visibleContacts = useSelector(getVisibleContacts);
   const dispatch = useDispatch();
 
   const deleteContact = id => dispatch(actions.deleteContact(id));
 
-  // const getVisibleContacts = () => {
-  //   const optimizedFilter = filter.toLowerCase();
-
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(optimizedFilter)
-  //   );
-  // };
-
   return (
     <Container>
-      {contacts.map(({ id, name, number }, index) => {
+      {visibleContacts.map(({ id, name, number }, index) => {
         return (
-          <ItemContact
+          <ContactsItem
             key={id}
             name={name}
             number={number}

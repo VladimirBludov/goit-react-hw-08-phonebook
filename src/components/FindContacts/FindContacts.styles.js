@@ -6,7 +6,7 @@ const Label = styled.label`
 `;
 
 const Filter = styled.input.attrs(() => ({
-  type: 'text',
+  type: 'search',
   name: 'filter',
   autoComplete: 'off',
 }))`

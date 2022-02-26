@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import * as actions from 'redux/contacts/contacts-actions';
+import { getContacts } from 'redux/contacts/contacts-selectors';
 import {
   Form,
   Label,
@@ -8,20 +11,41 @@ import {
   InputNumber,
 } from './ContactForm.styles';
 
-export default function ContactForm({ addContact }) {
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleChangeName = e => setName(e.target.value);
 
   const handleChangeNumber = e => setNumber(e.target.value);
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const checkContact = name => {
+    const normalizedName = name.toLowerCase();
+    return contacts.find(
+      contact => contact.name.toLowerCase() === normalizedName
+    );
+  };
 
-    addContact(name, number);
+  const reset = () => {
     setName('');
     setNumber('');
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const isContact = checkContact(name);
+
+    if (isContact) {
+      toast.error(`${name} is already in contacts.`);
+      reset();
+      return;
+    }
+
+    dispatch(actions.addContact({ name, number }));
+    reset();
   };
 
   return (
@@ -38,7 +62,3 @@ export default function ContactForm({ addContact }) {
     </Form>
   );
 }
-
-ContactForm.propTypes = {
-  addContact: PropTypes.func.isRequired,
-};

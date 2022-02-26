@@ -5,9 +5,9 @@ import {
   Container,
   Name,
   Number,
-} from './ItemContact.styles';
+} from './ContactsItem.styles';
 
-export default function ItemContact({ name, number, index, deleteContact }) {
+export default function ContactsItem({ name, number, index, deleteContact }) {
   return (
     <Container>
       <IndexNumber>{`${index + 1}.`}</IndexNumber>
@@ -18,7 +18,7 @@ export default function ItemContact({ name, number, index, deleteContact }) {
   );
 }
 
-ItemContact.propTypes = {
+ContactsItem.propTypes = {
   name: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
