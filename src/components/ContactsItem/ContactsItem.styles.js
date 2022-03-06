@@ -25,6 +25,7 @@ const Number = styled.span`
 const ButtonDelete = styled.button.attrs(() => ({
   type: 'button',
 }))`
+  height: 2em;
   border: none;
   margin-left: auto;
   padding: 5px;

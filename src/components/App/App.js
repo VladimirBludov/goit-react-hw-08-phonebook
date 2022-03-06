@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ContactForm from '../ContactForm';
@@ -7,6 +8,8 @@ import Section from '../Section';
 import { TitleProject } from './App.styles';
 
 export default function App() {
+  const [filter, setFilter] = useState('');
+
   return (
     <div>
       <TitleProject>Phonebook</TitleProject>
@@ -14,8 +17,8 @@ export default function App() {
         <ContactForm />
       </Section>
       <Section title="Contacts">
-        <FindContacts />
-        <Contacts />
+        <FindContacts filter={filter} setFilter={setFilter} />
+        <Contacts filter={filter} />
       </Section>
       <ToastContainer
         position="top-center"

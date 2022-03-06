@@ -40,6 +40,7 @@ const InputNumber = styled.input.attrs(() => ({
 const ButtonSubmit = styled.button.attrs(() => ({
   type: 'submit',
 }))`
+  height: 2em;
   border: none;
   background-color: aqua;
   border-radius: 8px;

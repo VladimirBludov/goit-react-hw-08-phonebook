@@ -1,8 +1,11 @@
+import Loader from 'components/Loader';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import * as actions from 'redux/contacts/contacts-actions';
-import { getContacts } from 'redux/contacts/contacts-selectors';
+import { checkContact } from 'redux/contacts/contacts-selectors';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'redux/contacts/contacts-slice';
 import {
   Form,
   Label,
@@ -14,29 +17,23 @@ import {
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
+  const [addContact, { isLoading }] = useAddContactMutation();
+  const { data: contacts } = useGetContactsQuery(undefined, {
+    skip: name === '',
+  });
 
   const handleChangeName = e => setName(e.target.value);
 
   const handleChangeNumber = e => setNumber(e.target.value);
-
-  const checkContact = name => {
-    const normalizedName = name.toLowerCase();
-    return contacts.find(
-      contact => contact.name.toLowerCase() === normalizedName
-    );
-  };
 
   const reset = () => {
     setName('');
     setNumber('');
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const isContact = checkContact(name);
+    const isContact = checkContact(contacts, name);
 
     if (isContact) {
       toast.error(`${name} is already in contacts.`);
@@ -44,7 +41,7 @@ export default function ContactForm() {
       return;
     }
 
-    dispatch(actions.addContact({ name, number }));
+    await addContact({ name, number });
     reset();
   };
 
@@ -58,7 +55,9 @@ export default function ContactForm() {
         Number
         <InputNumber value={number} onChange={handleChangeNumber} />
       </Label>
-      <ButtonSubmit>Add contact</ButtonSubmit>
+      <ButtonSubmit disabled={isLoading}>
+        {isLoading ? <Loader size={10} /> : 'Add contact'}
+      </ButtonSubmit>
     </Form>
   );
 }

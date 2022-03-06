@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const SectionContainer = styled.section`
-  width: 300px;
+  width: 350px;
   margin: 30px auto 0;
 `;
 

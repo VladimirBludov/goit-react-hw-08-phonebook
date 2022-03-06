@@ -1,18 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux';
-import * as actions from 'redux/contacts/contacts-actions';
-import { getFilter } from 'redux/contacts/contacts-selectors';
+import PropTypes from 'prop-types';
 import { Label, Filter } from './FindContacts.styles';
 
-export default function FindContacts() {
-  const filter = useSelector(getFilter);
-  const dispatch = useDispatch();
+FindContacts.propTypes = {
+  filter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
+};
 
-  const onChange = e => dispatch(actions.changeFilter(e.target.value));
-
+export default function FindContacts({ filter, setFilter }) {
   return (
     <Label>
-      Find contacts by name
-      <Filter value={filter} onChange={onChange} />
+      <span>Find contacts by name: </span>
+      <Filter value={filter} onChange={e => setFilter(e.target.value)} />
     </Label>
   );
 }
