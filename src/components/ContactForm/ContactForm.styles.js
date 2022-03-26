@@ -1,50 +1,79 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { Button, Form, Input } from "antd";
 
-const Form = styled.form`
+export const FormStyled = styled(Form).attrs({
+  labelCol: {
+    span: 6,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+  initialValues: {
+    remember: true,
+  },
+})`
+  @media screen and (max-width: 767px) {
+    width: 70vw;
+    max-width: 350px;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1199px) {
+    width: 50vw;
+  }
+
+  @media screen and (min-width: 1200px) {
+    width: 30vw;
+  }
+`;
+
+export const ItemName = styled(FormStyled.Item).attrs({
+  rules: [
+    {
+      required: true,
+      message: "Please input contact name!",
+    },
+    {
+      pattern: new RegExp(
+        "^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+      ),
+      message: "Wrong format!",
+    },
+  ],
+})``;
+
+export const ItemNumber = styled(FormStyled.Item).attrs({
+  rules: [
+    {
+      required: true,
+      message: "Please input contact number!",
+    },
+    {
+      pattern: new RegExp(
+        "\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}"
+      ),
+      message: "Wrong format!",
+    },
+  ],
+})``;
+
+export const InputName = styled(Input).attrs({
+  title:
+    "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
+})``;
+
+export const InputPhone = styled(Input).attrs({
+  title:
+    "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +",
+})``;
+
+export const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border: 1px solid black;
-  margin: auto;
-  padding: 15px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
-const Label = styled.label`
-  margin-bottom: 10px;
+export const ButtonStyled = styled(Button)`
+  font-size: 16px;
+  height: auto;
 `;
-
-const InputName = styled.input.attrs(() => ({
-  type: 'text',
-  name: 'name',
-  autoComplete: 'off',
-  required: true,
-  pattern: `^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$`,
-  title: `Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan`,
-}))`
-  display: block;
-  margin-top: 5px;
-`;
-
-const InputNumber = styled.input.attrs(() => ({
-  type: 'tel',
-  name: 'number',
-  autoComplete: 'off',
-  required: true,
-  pattern: `\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}`,
-  title: `Phone number must be digits and can contain spaces, dashes, parentheses and can start with +`,
-}))`
-  display: block;
-  margin-top: 5px;
-`;
-
-const ButtonSubmit = styled.button.attrs(() => ({
-  type: 'submit',
-}))`
-  height: 2em;
-  border: none;
-  background-color: aqua;
-  border-radius: 8px;
-  padding: 5px 15px;
-`;
-
-export { Form, Label, InputName, InputNumber, ButtonSubmit };

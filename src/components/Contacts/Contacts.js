@@ -1,48 +1,36 @@
-import PropTypes from 'prop-types';
-import { Container } from './Contacts.styles';
-import ContactsItem from '../ContactsItem';
-import Loader from '../Loader';
-import { useGetContactsQuery } from 'redux/contacts/contacts-slice';
-import { getVisibleContacts } from 'redux/contacts/contacts-selectors';
+import { Container } from "./Contacts.styles";
+import ContactsItem from "../ContactsItem";
+import Loader from "../Loader";
+import { useGetContactsQuery } from "redux/contacts/contactsApi";
+import {
+  getFilter,
+  getVisibleContacts,
+} from "redux/contacts/contacts-selectors";
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
-Contacts.propTypes = {
-  filter: PropTypes.string.isRequired,
-};
+export default function Contacts() {
+  const filter = useSelector(getFilter);
 
-export default function Contacts({ filter }) {
-  const { contacts, isFetching, isError, error } = useGetContactsQuery(
-    undefined,
-    {
-      selectFromResult: ({ data, isFetching, isError, error }) => ({
-        contacts: data && getVisibleContacts(data, filter),
-        isFetching,
-        isError,
-        error,
+  const { contacts, isFetching } = useGetContactsQuery(undefined, {
+    selectFromResult: ({ data, isFetching }) => ({
+      contacts: data ? getVisibleContacts(data, filter) : [],
+      isFetching,
+    }),
+  });
+
+  const contactsElements = useMemo(
+    () =>
+      contacts.map(({ id, name, number }) => {
+        return <ContactsItem key={id} id={id} name={name} number={number} />;
       }),
-    }
+    [contacts]
   );
 
-  let contactsElements = null;
-
-  if (contacts) {
-    contactsElements = contacts.map(({ id, name, number }, index) => {
-      return (
-        <ContactsItem
-          key={id}
-          id={id}
-          name={name}
-          number={number}
-          index={index}
-        />
-      );
-    });
-  }
-
   return (
-    <Container>
-      {isError && <p>{error.data}</p>}
-      {contactsElements}
+    <>
+      <Container>{contactsElements}</Container>
       {isFetching && <Loader />}
-    </Container>
+    </>
   );
 }

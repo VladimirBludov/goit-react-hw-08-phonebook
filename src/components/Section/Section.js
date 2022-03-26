@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import { SectionContainer, Title } from './Section.styles';
+import PropTypes from "prop-types";
+import { SectionContainer, TitleStyled } from "./Section.styles";
 
 export default function Section({ title, children }) {
   return (
     <SectionContainer>
-      {title && <Title>{title}</Title>}
+      {title && <TitleStyled>{title}</TitleStyled>}
       {children}
     </SectionContainer>
   );

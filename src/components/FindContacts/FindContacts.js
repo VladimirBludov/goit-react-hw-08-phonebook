@@ -1,16 +1,18 @@
-import PropTypes from 'prop-types';
-import { Label, Filter } from './FindContacts.styles';
+import Search from "antd/lib/input/Search";
+import { useDispatch } from "react-redux";
+import { changeFilter } from "redux/contacts/filterSlice";
 
-FindContacts.propTypes = {
-  filter: PropTypes.string.isRequired,
-  setFilter: PropTypes.func.isRequired,
-};
+export default function FindContacts() {
+  const dispatch = useDispatch();
 
-export default function FindContacts({ filter, setFilter }) {
   return (
-    <Label>
-      <span>Find contacts by name: </span>
-      <Filter value={filter} onChange={e => setFilter(e.target.value)} />
-    </Label>
+    <Search
+      placeholder="input contact name"
+      allowClear
+      size="large"
+      onSearch={value => dispatch(changeFilter(value))}
+      onChange={e => dispatch(changeFilter(e.target.value))}
+      style={{ width: 200 }}
+    />
   );
 }

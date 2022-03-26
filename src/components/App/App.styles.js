@@ -1,8 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const TitleProject = styled.h1`
-  color: blueviolet;
-  font-size: 24px;
-  margin: 15px 0;
+export const ButtonUp = styled.div`
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #1088e9;
+  color: #fff;
   text-align: center;
+  font-size: 14px;
 `;

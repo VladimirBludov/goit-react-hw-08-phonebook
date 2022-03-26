@@ -1,12 +1,14 @@
-import styled from 'styled-components';
+import Title from "antd/lib/typography/Title";
+import styled from "styled-components";
 
 export const SectionContainer = styled.section`
-  width: 350px;
-  margin: 30px auto 0;
+  margin: 30px 0 0;
 `;
 
-export const Title = styled.h2`
-  color: blueviolet;
-  font-size: 24px;
+export const TitleStyled = styled(Title).attrs({
+  level: 2,
+})`
+  /* color: blueviolet; */
+  text-align: center;
   margin-bottom: 15px;
 `;

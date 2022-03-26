@@ -1,63 +1,74 @@
-import Loader from 'components/Loader';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { checkContact } from 'redux/contacts/contacts-selectors';
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import { UserAddOutlined } from "@ant-design/icons";
+import { checkContact } from "redux/contacts/contacts-selectors";
+import { useGetContactsQuery } from "redux/contacts/contactsApi";
 import {
-  useAddContactMutation,
-  useGetContactsQuery,
-} from 'redux/contacts/contacts-slice';
-import {
-  Form,
-  Label,
-  ButtonSubmit,
+  FormStyled,
   InputName,
-  InputNumber,
-} from './ContactForm.styles';
+  InputPhone,
+  ButtonWrapper,
+  ButtonStyled,
+  ItemName,
+  ItemNumber,
+} from "./ContactForm.styles";
 
-export default function ContactForm() {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const [addContact, { isLoading }] = useAddContactMutation();
-  const { data: contacts } = useGetContactsQuery(undefined, {
-    skip: name === '',
-  });
+ContactForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  titleSubmit: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  name: PropTypes.string,
+  number: PropTypes.string,
+};
 
-  const handleChangeName = e => setName(e.target.value);
+export default function ContactForm({
+  onClose,
+  titleSubmit = "Submit",
+  onSubmit,
+  isLoading,
+  name = "",
+  number = "",
+}) {
+  const { data: contacts } = useGetContactsQuery();
+  const [form] = FormStyled.useForm();
 
-  const handleChangeNumber = e => setNumber(e.target.value);
-
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const isContact = checkContact(contacts, name);
+  const handleSubmit = async ({ name, number }) => {
+    const isContact = checkContact(contacts, name, number);
 
     if (isContact) {
       toast.error(`${name} is already in contacts.`);
-      reset();
+      form.resetFields();
       return;
     }
 
-    await addContact({ name, number });
-    reset();
+    await onSubmit({ name, number });
+    form.resetFields();
+    onClose();
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Label>
-        Name
-        <InputName value={name} onChange={handleChangeName} />
-      </Label>
-      <Label>
-        Number
-        <InputNumber value={number} onChange={handleChangeNumber} />
-      </Label>
-      <ButtonSubmit disabled={isLoading}>
-        {isLoading ? <Loader size={10} /> : 'Add contact'}
-      </ButtonSubmit>
-    </Form>
+    <FormStyled form={form} onFinish={handleSubmit}>
+      <ItemName label="Name" name="name" initialValue={name}>
+        <InputName value={name} />
+      </ItemName>
+      <ItemNumber label="Number" name="number" initialValue={number}>
+        <InputPhone value={number} />
+      </ItemNumber>
+      <ButtonWrapper>
+        <ButtonStyled
+          type="primary"
+          htmlType="submit"
+          icon={<UserAddOutlined />}
+          loading={isLoading}
+          style={{ marginRight: "10px" }}
+        >
+          {titleSubmit}
+        </ButtonStyled>
+        <ButtonStyled type="primary" danger onClick={() => onClose()}>
+          Cancel
+        </ButtonStyled>
+      </ButtonWrapper>
+    </FormStyled>
   );
 }
